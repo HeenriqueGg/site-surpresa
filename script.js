@@ -1,497 +1,383 @@
-// ===========================
-// script.js - Dia das Mães Premium
-// ===========================
-
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // ---------- ELEMENTS ----------
+    // --- Configuração a partir de config.json embutido ---
+    const configElement = document.getElementById('configData');
+    let config = {
+        motherName: "Maria",
+        startDate: "1990-05-15",
+        messages: [
+            { icon: "🌸", front: "Você é meu porto seguro", back: "Nos dias difíceis, só de lembrar do seu abraço, tudo fica bem. Obrigado por ser meu refúgio." },
+            { icon: "✨", front: "Gratidão eterna", back: "Cada sacrifício seu me trouxe até aqui. Eu sou quem sou por sua causa, mãe." },
+            { icon: "💖", front: "Amor incondicional", back: "Você me ensinou que o amor verdadeiro não espera nada em troca. Isso é o que eu levo para a vida." },
+            { icon: "🌙", front: "Noites em claro", back: "Lembro das noites que você ficou ao meu lado quando eu estava doente. Seu carinho me curava." },
+            { icon: "🌟", front: "Minha inspiração", back: "Sua força me inspira todos os dias. Você é a mulher mais incrível que eu conheço." },
+            { icon: "🕊️", front: "Paz e aconchego", back: "Sua voz é a melodia mais suave que já ouvi. Você é paz em forma de gente." },
+            { icon: "🌷", front: "Jardim de amor", back: "Você plantou as flores mais bonitas no jardim da minha vida. Cada pétala é uma lembrança feliz." },
+            { icon: "💫", front: "Magia materna", back: "Existe uma magia no seu jeito de cuidar que transforma qualquer momento comum em algo especial." }
+        ],
+        photos: [
+            { src: "", caption: "Mãe, você é luz" },
+            { src: "", caption: "Momentos que guardo no coração" },
+            { src: "", caption: "Seu sorriso ilumina tudo" }
+        ],
+        videos: [
+            { src: "", title: "Mensagem especial" },
+            { src: "", title: "Lembranças felizes" }
+        ],
+        letterText: "Minha querida mãe,\n\nEscrevo esta carta com lágrimas nos olhos e o coração transbordando de amor. Você é a razão de tudo o que sou. Cada passo que dei na vida foi sustentado pelo seu amor inabalável.\n\nLembro das noites em que você sacrificou seu sono para cuidar de mim, dos dias em que seu sorriso foi minha única certeza em meio às tempestades. Você é meu exemplo de força, bondade e resiliência.\n\nObrigado por cada 'sim', por cada 'não' que me protegeu, por cada abraço apertado e por cada palavra de incentivo. Você é a pessoa mais extraordinária que eu conheço.\n\nSaiba que todo o meu sucesso e felicidade são reflexos do seu amor. Eu te amo além das palavras, além do tempo, além da vida.\n\nEternamente grato(a) e apaixonado(a) por você."
+    };
+
+    // Se houver config.json carregado via script, sobrescreve
+    if (configElement && configElement.textContent.trim() !== '') {
+        try {
+            const loaded = JSON.parse(configElement.textContent);
+            config = { ...config, ...loaded };
+        } catch (e) {
+            console.log("Usando configuração padrão.");
+        }
+    }
+
+    // --- Elementos DOM ---
     const loadingScreen = document.getElementById('loadingScreen');
-    const coverScreen = document.getElementById('coverScreen');
-    const mainSite = document.getElementById('mainSite');
-    const openBtn = document.getElementById('openBtn');
-    const bgMusic = document.getElementById('bgMusic');
+    const openingScreen = document.getElementById('openingScreen');
+    const mainContent = document.getElementById('mainContent');
+    const openButton = document.getElementById('openButton');
     const musicToggle = document.getElementById('musicToggle');
-    const coverParticlesCanvas = document.getElementById('coverParticles');
-    const bgParticlesCanvas = document.getElementById('bgParticles');
-    const letterBody = document.getElementById('letterBody');
-    const daysCounter = document.getElementById('daysCounter');
-    const counterDetail = document.getElementById('counterDetail');
+    const bgMusic = document.getElementById('bgMusic');
+    const particlesCanvas = document.getElementById('particlesCanvas');
+    const cursor = document.getElementById('customCursor');
+    const cursorTrail = document.getElementById('cursorTrail');
+    const messagesGrid = document.getElementById('messagesGrid');
     const galleryGrid = document.getElementById('galleryGrid');
     const galleryModal = document.getElementById('galleryModal');
     const modalImage = document.getElementById('modalImage');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
+    const modalCaption = document.getElementById('modalCaption');
     const modalClose = document.getElementById('modalClose');
-    const modalPrev = document.getElementById('modalPrev');
-    const modalNext = document.getElementById('modalNext');
+    const letterBody = document.getElementById('letterBody');
+    const daysCounter = document.getElementById('daysCounter');
+    const hoursCounter = document.getElementById('hoursCounter');
+    const minutesCounter = document.getElementById('minutesCounter');
+    const secondsCounter = document.getElementById('secondsCounter');
     const interactiveArea = document.getElementById('interactiveArea');
-    const interactiveMessages = document.getElementById('interactiveMessages');
-    const finalBtn = document.getElementById('finalBtn');
-    const finalOverlay = document.getElementById('finalOverlay');
-    const finalHeartsRain = document.getElementById('finalHeartsRain');
-    const starsCanvas = document.getElementById('starsCanvas');
-    const letterParticlesCanvas = document.getElementById('letterParticles');
-    const coverSparkles = document.getElementById('coverSparkles');
-    const counterSparkles = document.getElementById('counterSparkles');
-    const timelineContainer = document.getElementById('timelineContainer');
-    const videoGrid = document.getElementById('videoGrid');
-    const heroImage = document.getElementById('heroImage');
-    const coverName = document.getElementById('coverName');
-    const footerYear = document.getElementById('footerYear');
+    const finalButton = document.getElementById('finalButton');
+    const heartRain = document.getElementById('heartRain');
+    const finalOverlay = document.getElementById('finalOverlayMessage');
+    const finalStarsContainer = document.getElementById('finalStars');
+    const currentYearSpan = document.getElementById('currentYear');
 
-    // ---------- CONFIG ----------
-    const motherName = 'Maria'; // Altere aqui
-    const startDate = new Date(1985, 4, 12); // Data de nascimento (ou data especial) - AAAA, M, D
-    const heroPhoto = 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&h=700&fit=crop&crop=faces';
-    
-    // Atualiza nome no cover
-    if (coverName) coverName.textContent = motherName;
+    currentYearSpan.textContent = new Date().getFullYear();
 
-    // Timeline data
-    const timelineData = [
-        { year: '1985', event: 'Você nasceu', desc: 'O mundo ganhou uma pessoa especial, que mais tarde se tornaria a melhor mãe.', img: 'https://images.unsplash.com/photo-1503454537195-1dcabb1b49e0?w=200&h=200&fit=crop' },
-        { year: '2002', event: 'Meu nascimento', desc: 'O dia em que você segurou meu pequeno corpo e prometeu me amar para sempre.', img: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=200&h=200&fit=crop' },
-        { year: '2005', event: 'Primeiros passos', desc: 'Você soltou minha mão por um segundo, mas nunca soltou meu coração.', img: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=200&h=200&fit=crop' },
-        { year: '2010', event: 'Primeiro dia de aula', desc: 'Você me deu a mochila mais linda e um abraço que dura até hoje.', img: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&h=200&fit=crop' },
-        { year: '2018', event: 'Momento difícil superado', desc: 'Você segurou minha mão com força e mostrou que juntos somos invencíveis.', img: 'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=200&h=200&fit=crop' },
-        { year: '2026', event: 'Hoje e sempre', desc: 'Cada dia ao seu lado é um presente que eu valorizo mais que tudo.', img: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200&h=200&fit=crop' }
-    ];
-
-    // Gallery images
-    const galleryImages = [
-        { src: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&h=600&fit=crop', title: 'Sempre unidas', desc: 'Nossas mãos jamais se soltarão.' },
-        { src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500&h=600&fit=crop', title: 'Abraço apertado', desc: 'O melhor lugar do mundo.' },
-        { src: 'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=500&h=600&fit=crop', title: 'Riso solto', desc: 'Sua alegria ilumina minha vida.' },
-        { src: 'https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?w=500&h=600&fit=crop', title: 'Momentos simples', desc: 'A felicidade mora nos detalhes.' },
-        { src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=600&fit=crop', title: 'Cumplicidade', desc: 'Cúmplices de todas as horas.' },
-        { src: 'https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=500&h=600&fit=crop', title: 'Força', desc: 'Você é meu exemplo de coragem.' },
-        { src: 'https://images.unsplash.com/photo-1464863979621-258859e62245?w=500&h=600&fit=crop', title: 'Doçura', desc: 'Seu carinho transforma tudo.' },
-        { src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=600&fit=crop', title: 'Olhar', desc: 'Um olhar que diz tudo.' }
-    ];
-
-    // Video data (placeholders)
-    const videoData = [
-        { title: 'Mensagem do coração', desc: 'Um recado especial que gravei para você.', thumb: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=250&fit=crop' },
-        { title: 'Nossa música', desc: 'A canção que sempre nos faz dançar.', thumb: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400&h=250&fit=crop' },
-        { title: 'Lembranças em vídeo', desc: 'Momentos que guardo com carinho.', thumb: 'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?w=400&h=250&fit=crop' }
-    ];
-
-    // Interactive messages
-    const hiddenMessages = [
-        'Você é a melhor mãe do universo! 💖',
-        'Obrigado por cada abraço.',
-        'Seu sorriso é meu sol.',
-        'Mãe, você é minha heroína.',
-        'Te amo além das palavras.',
-        'Nunca se esqueça do quanto é amada.',
-        'Você ilumina meus dias.',
-        'Gratidão eterna por sua existência.'
-    ];
-
-    // Letter text parts
-    const letterParagraphs = [
-        'Mãe, desde o momento em que abri meus olhos, foi você quem me mostrou o que é o amor. Não o amor de filmes ou livros, mas aquele amor tranquilo que aquece a alma e faz a vida ter sentido.',
-        'Lembro de cada noite em que você sacrificou seu sono pelo meu. De cada vez que você abriu mão de algo seu para que nada me faltasse. Sua força silenciosa construiu o chão que eu piso hoje.',
-        'Houve dias difíceis, eu sei. Dias em que você chorou escondido, mas mesmo assim encontrou forças para me fazer sorrir. Você transformou suas lágrimas em adubo para que eu pudesse florescer. E eu floresci, mãe. Por sua causa.',
-        'Sinto um orgulho imenso de chamar você de minha mãe. Não apenas pelo que você fez, mas pela pessoa maravilhosa que você é. Inteira, verdadeira, generosa. O mundo é melhor porque você existe, e eu sou a prova viva do seu amor.',
-        'Esta carta é só um fragmento do que sinto. Não existem palavras suficientes para agradecer. Então, eu prometo honrar seu amor todos os dias, sendo a melhor versão de mim mesmo. Você é a raiz mais profunda da minha história.',
-        'Te amo hoje, amanhã e em todas as vidas que eu tiver. Para sempre, sua cria.'
-    ];
-
-    // ---------- LOADING & COVER ----------
-    // Simula carregamento
+    // --- Loading Screen ---
     window.addEventListener('load', () => {
         setTimeout(() => {
             loadingScreen.classList.add('hidden');
-        }, 2000);
+        }, 1500);
     });
 
-    // Sparkles cover
-    function createCoverSparkles() {
-        if (!coverSparkles) return;
-        for (let i = 0; i < 30; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'cover-sparkle';
-            sparkle.style.left = Math.random() * 100 + '%';
-            sparkle.style.top = Math.random() * 100 + '%';
-            sparkle.style.animationDelay = Math.random() * 4 + 's';
-            sparkle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            sparkle.style.width = (Math.random() * 5 + 2) + 'px';
-            sparkle.style.height = sparkle.style.width;
-            coverSparkles.appendChild(sparkle);
-        }
-    }
-    createCoverSparkles();
-
-    // Cover Particles Canvas
-    function initCoverParticles() {
-        if (!coverParticlesCanvas) return;
-        const ctx = coverParticlesCanvas.getContext('2d');
-        coverParticlesCanvas.width = window.innerWidth;
-        coverParticlesCanvas.height = window.innerHeight;
-        const particles = [];
-        for (let i = 0; i < 60; i++) {
-            particles.push({
-                x: Math.random() * coverParticlesCanvas.width,
-                y: Math.random() * coverParticlesCanvas.height,
-                radius: Math.random() * 2 + 1,
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                opacity: Math.random() * 0.5 + 0.2
-            });
-        }
-
-        function animate() {
-            if (coverScreen.classList.contains('hidden')) return;
-            ctx.clearRect(0, 0, coverParticlesCanvas.width, coverParticlesCanvas.height);
-            particles.forEach(p => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                if (p.x < 0 || p.x > coverParticlesCanvas.width) p.speedX *= -1;
-                if (p.y < 0 || p.y > coverParticlesCanvas.height) p.speedY *= -1;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(201,151,107,${p.opacity})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    }
-    initCoverParticles();
-    window.addEventListener('resize', () => {
-        if (coverParticlesCanvas) {
-            coverParticlesCanvas.width = window.innerWidth;
-            coverParticlesCanvas.height = window.innerHeight;
-        }
-    });
-
-    // Open button
-    openBtn.addEventListener('click', () => {
-        coverScreen.classList.add('hidden');
-        mainSite.classList.add('visible');
-        document.body.style.cursor = 'none';
-        // Iniciar música ao abrir
-        bgMusic.play().catch(() => {});
-        musicToggle.classList.remove('is-paused');
-        // Disparar animações de entrada
-        setTimeout(() => {
-            revealSections();
-            initBackgroundParticles();
-            initLetterTypewriter();
-            updateCounter();
-            renderTimeline();
-            renderGallery();
-            renderVideos();
-        }, 500);
-    });
-
-    // Music toggle
-    musicToggle.addEventListener('click', () => {
-        if (bgMusic.paused) {
-            bgMusic.play();
-            musicToggle.classList.remove('is-paused');
-        } else {
-            bgMusic.pause();
-            musicToggle.classList.add('is-paused');
-        }
-    });
-
-    // ---------- CUSTOM CURSOR ----------
-    const cursor = document.getElementById('customCursor');
-    const cursorDot = document.getElementById('cursorDot');
-    if (cursor && cursorDot && window.matchMedia('(min-width: 601px)').matches) {
+    // --- Custom Cursor ---
+    if (window.innerWidth > 1024) {
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
         });
-        document.addEventListener('mousedown', () => cursor.classList.add('click'));
-        document.addEventListener('mouseup', () => cursor.classList.remove('click'));
-        document.querySelectorAll('a, button, .gallery-item, .interactive-area, .timeline-card').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
     }
 
-    // ---------- SCROLL REVEAL ----------
-    function revealSections() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    if (entry.target.classList.contains('timeline-item')) {
-                        entry.target.style.transitionDelay = (Array.from(entry.target.parentNode.children).indexOf(entry.target) * 0.1) + 's';
-                    }
-                }
-            });
-        }, { threshold: 0.15 });
+    // --- Partículas de Fundo ---
+    const ctx = particlesCanvas.getContext('2d');
+    let particles = [];
+    let animationFrameId;
 
-        document.querySelectorAll('.timeline-item, .gallery-item, .video-card, .counter-card, .letter-paper, .hero-text-content, .hero-image-wrapper').forEach(el => {
-            observer.observe(el);
+    function resizeCanvas() {
+        particlesCanvas.width = window.innerWidth;
+        particlesCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * particlesCanvas.width;
+            this.y = Math.random() * particlesCanvas.height;
+            this.size = Math.random() * 2.5 + 0.8;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x < 0 || this.x > particlesCanvas.width || this.y < 0 || this.y > particlesCanvas.height) {
+                this.reset();
+            }
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 133, 155, ${this.opacity})`;
+            ctx.fill();
+        }
+    }
+
+    function initParticles(count) {
+        particles = [];
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+    }
+    const particleCount = window.innerWidth < 768 ? 45 : 80;
+    initParticles(particleCount);
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        animationFrameId = requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // --- Música ---
+    let musicPlaying = false;
+    musicToggle.addEventListener('click', () => {
+        if (musicPlaying) {
+            bgMusic.pause();
+            musicToggle.classList.remove('playing');
+        } else {
+            bgMusic.play().catch(() => {
+                alert("Clique novamente para tocar a música.");
+            });
+            musicToggle.classList.add('playing');
+        }
+        musicPlaying = !musicPlaying;
+    });
+    bgMusic.volume = 0.3;
+
+    // --- Abertura ---
+    openButton.addEventListener('click', () => {
+        openingScreen.classList.add('hidden');
+        mainContent.classList.add('visible');
+        setTimeout(() => {
+            if (!musicPlaying) {
+                bgMusic.play().catch(() => {});
+                musicToggle.classList.add('playing');
+                musicPlaying = true;
+            }
+        }, 800);
+    });
+
+    // --- Mensagens Interativas ---
+    function createMessageCards() {
+        messagesGrid.innerHTML = '';
+        config.messages.forEach((msg, index) => {
+            const card = document.createElement('div');
+            card.className = 'message-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front">
+                        <span class="card-icon">${msg.icon}</span>
+                        <p>${msg.front}</p>
+                        <span class="card-sparkle">✦</span>
+                    </div>
+                    <div class="card-back">
+                        <p>${msg.back}</p>
+                    </div>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                const inner = card.querySelector('.card-inner');
+                inner.classList.toggle('flipped');
+            });
+            messagesGrid.appendChild(card);
         });
     }
+    createMessageCards();
 
-    // ---------- BACKGROUND PARTICLES ----------
-    function initBackgroundParticles() {
-        if (!bgParticlesCanvas) return;
-        const ctx = bgParticlesCanvas.getContext('2d');
-        bgParticlesCanvas.width = window.innerWidth;
-        bgParticlesCanvas.height = window.innerHeight;
-        const particles = [];
-        for (let i = 0; i < 80; i++) {
-            particles.push({
-                x: Math.random() * bgParticlesCanvas.width,
-                y: Math.random() * bgParticlesCanvas.height,
-                radius: Math.random() * 1.5 + 0.8,
-                speedY: Math.random() * 0.15 + 0.05,
-                opacity: Math.random() * 0.3 + 0.1
-            });
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, bgParticlesCanvas.width, bgParticlesCanvas.height);
-            particles.forEach(p => {
-                p.y += p.speedY;
-                if (p.y > bgParticlesCanvas.height) { p.y = 0; p.x = Math.random() * bgParticlesCanvas.width; }
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
-                ctx.fillStyle = `rgba(201,151,107,${p.opacity})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-        window.addEventListener('resize', () => {
-            bgParticlesCanvas.width = window.innerWidth;
-            bgParticlesCanvas.height = window.innerHeight;
-        });
-    }
-
-    // ---------- STARS CANVAS (FINAL) ----------
-    function initStars() {
-        if (!starsCanvas) return;
-        const ctx = starsCanvas.getContext('2d');
-        starsCanvas.width = window.innerWidth;
-        starsCanvas.height = window.innerHeight;
-        const stars = [];
-        for (let i = 0; i < 150; i++) {
-            stars.push({
-                x: Math.random() * starsCanvas.width,
-                y: Math.random() * starsCanvas.height,
-                radius: Math.random() * 2 + 0.8,
-                twinkle: Math.random() * 0.05 + 0.02,
-                opacity: Math.random()
-            });
-        }
-        function animate() {
-            ctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-            stars.forEach(s => {
-                s.opacity += s.twinkle;
-                if (s.opacity > 1 || s.opacity < 0.3) s.twinkle *= -1;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.radius, 0, Math.PI*2);
-                ctx.fillStyle = `rgba(255,255,240,${s.opacity})`;
-                ctx.fill();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    }
-    initStars();
-
-    // ---------- LETTER TYPING ----------
-    function initLetterTypewriter() {
-        if (!letterBody) return;
-        letterBody.innerHTML = '';
-        let fullText = letterParagraphs.join('\n\n');
-        let index = 0;
-        function type() {
-            if (index < fullText.length) {
-                letterBody.innerHTML += fullText.charAt(index) === '\n' ? '<br>' : fullText.charAt(index);
-                index++;
-                setTimeout(type, 30);
+    // --- Galeria ---
+    function createGallery() {
+        galleryGrid.innerHTML = '';
+        config.photos.forEach((photo, idx) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.style.animationDelay = `${idx * 0.15}s`;
+            if (photo.src) {
+                item.innerHTML = `<img src="${photo.src}" alt="${photo.caption}" loading="lazy">`;
             } else {
-                // Finalizar com parágrafos
-                letterBody.innerHTML = letterParagraphs.map(p => `<p>${p}</p>`).join('');
+                item.innerHTML = `<div class="gallery-placeholder">🌸</div>`;
+            }
+            item.addEventListener('click', () => {
+                if (photo.src) {
+                    modalImage.src = photo.src;
+                } else {
+                    modalImage.src = '';
+                }
+                modalCaption.textContent = photo.caption;
+                galleryModal.classList.add('active');
+            });
+            galleryGrid.appendChild(item);
+        });
+    }
+    createGallery();
+
+    modalClose.addEventListener('click', () => galleryModal.classList.remove('active'));
+    document.querySelector('.modal-overlay')?.addEventListener('click', () => galleryModal.classList.remove('active'));
+
+    // --- Carta com Typewriter ---
+    function typeWriter(text, element, speed = 25) {
+        let i = 0;
+        element.textContent = '';
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
             }
         }
         type();
     }
 
-    // ---------- COUNTER ----------
-    function updateCounter() {
-        if (!daysCounter || !counterDetail) return;
-        const now = new Date();
-        const diffTime = Math.abs(now - startDate);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        daysCounter.textContent = diffDays.toLocaleString('pt-BR');
-        counterDetail.textContent = `desde ${startDate.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-    }
-
-    // ---------- TIMELINE ----------
-    function renderTimeline() {
-        if (!timelineContainer) return;
-        timelineContainer.innerHTML = timelineData.map(item => `
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-card">
-                    <div class="timeline-year">${item.year}</div>
-                    <div class="timeline-event">${item.event}</div>
-                    <div class="timeline-desc">${item.desc}</div>
-                    ${item.img ? `<img src="${item.img}" alt="${item.event}" class="timeline-img" loading="lazy">` : ''}
-                </div>
-            </div>
-        `).join('');
-        // Re-observar após renderizar
-        setTimeout(() => {
-            document.querySelectorAll('.timeline-item').forEach(el => {
-                el.classList.add('visible');
-            });
-        }, 200);
-    }
-
-    // ---------- GALLERY ----------
-    let currentGalleryIndex = 0;
-    function renderGallery() {
-        if (!galleryGrid) return;
-        galleryGrid.innerHTML = galleryImages.map((img, i) => `
-            <div class="gallery-item" data-index="${i}">
-                <img src="${img.src}" alt="${img.title}" loading="lazy">
-                <div class="gallery-overlay"><span>${img.title}</span></div>
-            </div>
-        `).join('');
-
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', () => {
-                currentGalleryIndex = parseInt(item.dataset.index);
-                openModal(currentGalleryIndex);
-            });
+    const letterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                typeWriter(config.letterText, letterBody, 22);
+                letterObserver.unobserve(entry.target);
+            }
         });
+    }, { threshold: 0.3 });
+    if (letterBody) letterObserver.observe(letterBody);
+
+    // --- Contador ---
+    function updateCounter() {
+        const start = new Date(config.startDate);
+        const now = new Date();
+        const diff = now - start;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        if (daysCounter) daysCounter.textContent = days.toLocaleString();
+        if (hoursCounter) hoursCounter.textContent = hours;
+        if (minutesCounter) minutesCounter.textContent = minutes;
+        if (secondsCounter) secondsCounter.textContent = seconds;
     }
+    setInterval(updateCounter, 1000);
+    updateCounter();
 
-    function openModal(index) {
-        const img = galleryImages[index];
-        modalImage.src = img.src;
-        modalTitle.textContent = img.title;
-        modalDesc.textContent = img.desc;
-        galleryModal.classList.add('open');
-        document.body.classList.add('modal-open');
-    }
-
-    function closeModal() {
-        galleryModal.classList.remove('open');
-        document.body.classList.remove('modal-open');
-    }
-
-    modalClose.addEventListener('click', closeModal);
-    galleryModal.addEventListener('click', (e) => {
-        if (e.target === galleryModal) closeModal();
-    });
-    modalPrev.addEventListener('click', () => {
-        currentGalleryIndex = (currentGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
-        openModal(currentGalleryIndex);
-    });
-    modalNext.addEventListener('click', () => {
-        currentGalleryIndex = (currentGalleryIndex + 1) % galleryImages.length;
-        openModal(currentGalleryIndex);
-    });
-    document.addEventListener('keydown', (e) => {
-        if (!galleryModal.classList.contains('open')) return;
-        if (e.key === 'Escape') closeModal();
-        if (e.key === 'ArrowLeft') modalPrev.click();
-        if (e.key === 'ArrowRight') modalNext.click();
-    });
-
-    // ---------- VIDEOS ----------
-    function renderVideos() {
-        if (!videoGrid) return;
-        videoGrid.innerHTML = videoData.map(v => `
-            <div class="video-card">
-                <div class="video-placeholder">🎬</div>
-                <div class="video-info">
-                    <h4>${v.title}</h4>
-                    <p>${v.desc}</p>
-                </div>
-            </div>
-        `).join('');
-        setTimeout(() => {
-            document.querySelectorAll('.video-card').forEach(el => el.classList.add('visible'));
-        }, 300);
-    }
-
-    // ---------- INTERACTIVE AREA ----------
-    function spawnHeart(x, y) {
-        const heart = document.createElement('div');
-        heart.className = 'floating-heart';
-        heart.textContent = '❤️';
-        heart.style.left = x + 'px';
-        heart.style.top = y + 'px';
-        document.body.appendChild(heart);
-        heart.addEventListener('animationend', () => heart.remove());
+    // --- Seção Interativa: estrelas e corações ao clicar ---
+    function createFloatingElement(x, y) {
+        const el = document.createElement('span');
+        const isHeart = Math.random() > 0.5;
+        el.textContent = isHeart ? '❤️' : '✨';
+        el.style.position = 'fixed';
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.fontSize = (Math.random() * 20 + 15) + 'px';
+        el.style.pointerEvents = 'none';
+        el.style.zIndex = '200';
+        el.style.animation = 'fadeInUp 1.5s ease forwards';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
     }
 
     interactiveArea.addEventListener('click', (e) => {
         const rect = interactiveArea.getBoundingClientRect();
         const x = e.clientX;
         const y = e.clientY;
-        // Spawn multiple hearts
         for (let i = 0; i < 5; i++) {
             setTimeout(() => {
-                const offsetX = (Math.random() - 0.5) * 40;
-                const offsetY = (Math.random() - 0.5) * 40;
-                spawnHeart(x + offsetX, y + offsetY);
+                createFloatingElement(x + (Math.random()-0.5)*60, y + (Math.random()-0.5)*60);
             }, i * 50);
         }
-        // Show random message
-        const msg = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+        // Mensagem aleatória flutuante
+        const randomMsg = config.messages[Math.floor(Math.random() * config.messages.length)];
         const msgEl = document.createElement('div');
-        msgEl.className = 'interactive-msg';
-        msgEl.textContent = msg;
-        interactiveMessages.appendChild(msgEl);
-        setTimeout(() => msgEl.remove(), 3000);
+        msgEl.textContent = randomMsg.front;
+        msgEl.style.position = 'fixed';
+        msgEl.style.left = x + 'px';
+        msgEl.style.top = y + 'px';
+        msgEl.style.transform = 'translate(-50%, -50%)';
+        msgEl.style.padding = '0.8rem 1.5rem';
+        msgEl.style.background = 'rgba(255,255,255,0.8)';
+        msgEl.style.backdropFilter = 'blur(10px)';
+        msgEl.style.borderRadius = '30px';
+        msgEl.style.fontFamily = 'var(--fonte-titulos)';
+        msgEl.style.color = '#4a3548';
+        msgEl.style.zIndex = '250';
+        msgEl.style.pointerEvents = 'none';
+        msgEl.style.animation = 'fadeInUp 2s ease forwards';
+        document.body.appendChild(msgEl);
+        setTimeout(() => msgEl.remove(), 2000);
     });
 
-    // Also allow touch
-    interactiveArea.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const fakeEvent = { clientX: touch.clientX, clientY: touch.clientY };
-        interactiveArea.dispatchEvent(new CustomEvent('click', { detail: fakeEvent }));
-    });
+    // --- Final: Estrelas e Chuva de Corações ---
+    function createStars() {
+        if (!finalStarsContainer) return;
+        finalStarsContainer.innerHTML = '';
+        for (let i = 0; i < 80; i++) {
+            const star = document.createElement('span');
+            star.textContent = '✦';
+            star.style.position = 'absolute';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.fontSize = (Math.random() * 12 + 6) + 'px';
+            star.style.color = '#fff';
+            star.style.opacity = Math.random() * 0.8 + 0.2;
+            star.style.animation = `twinkle ${Math.random() * 3 + 2}s ease infinite`;
+            finalStarsContainer.appendChild(star);
+        }
+    }
+    createStars();
 
-    // ---------- FINAL BUTTON ----------
-    finalBtn.addEventListener('click', () => {
+    finalButton.addEventListener('click', () => {
+        // Ativar overlay final
         finalOverlay.classList.add('active');
         // Chuva de corações
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 40; i++) {
             setTimeout(() => {
-                const heart = document.createElement('div');
-                heart.className = 'heart-rain';
+                const heart = document.createElement('span');
                 heart.textContent = '❤️';
+                heart.style.position = 'absolute';
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
-                finalHeartsRain.appendChild(heart);
-                setTimeout(() => heart.remove(), 5000);
+                heart.style.top = '-20px';
+                heart.style.fontSize = (Math.random() * 30 + 15) + 'px';
+                heart.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                heart.style.pointerEvents = 'none';
+                heartRain.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
             }, i * 80);
         }
     });
 
-    finalOverlay.addEventListener('click', (e) => {
-        if (e.target === finalOverlay) {
-            finalOverlay.classList.remove('active');
-            finalHeartsRain.innerHTML = '';
-        }
+    finalOverlay.addEventListener('click', () => {
+        finalOverlay.classList.remove('active');
     });
 
-    // ---------- UPDATE HERO IMAGE ----------
-    if (heroImage && heroPhoto) {
-        heroImage.src = heroPhoto;
-    }
+    // Estilo adicional para chuva
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(styleSheet);
 
-    // Footer year
-    if (footerYear) {
-        footerYear.textContent = `© ${new Date().getFullYear()} · Homenagem Premium`;
-    }
+    // --- Scroll Reveal simples ---
+    const revealElements = document.querySelectorAll('.section-header, .hero-text-content, .gallery-item, .message-card, .video-card');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 0.8s ease both';
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    revealElements.forEach(el => revealObserver.observe(el));
 });
