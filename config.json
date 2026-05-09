@@ -11,9 +11,9 @@
         { "icon": "💫", "front": "Magia materna", "back": "Existe uma magia no seu jeito de cuidar que transforma qualquer momento comum em algo especial." }
     ],
     "photos": [
-        { "src": "", "caption": "Mãe, você é luz" },
-        { "src": "", "caption": "Momentos que guardo no coração" },
-        { "src": "", "caption": "Seu sorriso ilumina tudo" }
+        { "src": "fotos/foto1.jpg", "caption": "Mãe, você é luz" },
+        { "src": "fotos/foto2.jpg", "caption": "Momentos que guardo no coração" },
+        { "src": "fotos/foto3.jpg", "caption": "Seu sorriso ilumina tudo" }
     ],
     "videos": [
         { "src": "", "title": "Mensagem especial" },
