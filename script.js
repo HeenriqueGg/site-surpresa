@@ -1,33 +1,4 @@
-// script.js
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Configuração a partir de config.json embutido ---
-    const configElement = document.getElementById('configData');
-    let config = {
-        motherName: "Maria",
-        startDate: "1990-05-15",
-        messages: [
-            { icon: "🌸", front: "Você é meu porto seguro", back: "Nos dias difíceis, só de lembrar do seu abraço, tudo fica bem. Obrigado por ser meu refúgio." },
-            { icon: "✨", front: "Gratidão eterna", back: "Cada sacrifício seu me trouxe até aqui. Eu sou quem sou por sua causa, mãe." },
-            { icon: "💖", front: "Amor incondicional", back: "Você me ensinou que o amor verdadeiro não espera nada em troca. Isso é o que eu levo para a vida." },
-            { icon: "🌙", front: "Noites em claro", back: "Lembro das noites que você ficou ao meu lado quando eu estava doente. Seu carinho me curava." },
-            { icon: "🌟", front: "Minha inspiração", back: "Sua força me inspira todos os dias. Você é a mulher mais incrível que eu conheço." },
-            { icon: "🕊️", front: "Paz e aconchego", back: "Sua voz é a melodia mais suave que já ouvi. Você é paz em forma de gente." },
-            { icon: "🌷", front: "Jardim de amor", back: "Você plantou as flores mais bonitas no jardim da minha vida. Cada pétala é uma lembrança feliz." },
-            { icon: "💫", front: "Magia materna", back: "Existe uma magia no seu jeito de cuidar que transforma qualquer momento comum em algo especial." }
-        ],
-        photos: [
-            { src: "", caption: "Mãe, você é luz" },
-            { src: "", caption: "Momentos que guardo no coração" },
-            { src: "", caption: "Seu sorriso ilumina tudo" }
-        ],
-        videos: [
-            { src: "", title: "Mensagem especial" },
-            { src: "", title: "Lembranças felizes" }
-        ],
-        letterText: "Minha querida mãe,\n\nEscrevo esta carta com lágrimas nos olhos e o coração transbordando de amor. Você é a razão de tudo o que sou. Cada passo que dei na vida foi sustentado pelo seu amor inabalável.\n\nLembro das noites em que você sacrificou seu sono para cuidar de mim, dos dias em que seu sorriso foi minha única certeza em meio às tempestades. Você é meu exemplo de força, bondade e resiliência.\n\nObrigado por cada 'sim', por cada 'não' que me protegeu, por cada abraço apertado e por cada palavra de incentivo. Você é a pessoa mais extraordinária que eu conheço.\n\nSaiba que todo o meu sucesso e felicidade são reflexos do seu amor. Eu te amo além das palavras, além do tempo, além da vida.\n\nEternamente grato(a) e apaixonado(a) por você."
-    };
-
-    // Se houver config.json carregado via script, sobrescreve
+// Se houver config.json carregado via script, sobrescreve
     if (configElement && configElement.textContent.trim() !== '') {
         try {
             const loaded = JSON.parse(configElement.textContent);
@@ -380,4 +351,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.15 });
     revealElements.forEach(el => revealObserver.observe(el));
-});
+;
