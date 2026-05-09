@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Uma homenagem especial para a melhor mãe do mundo. Um presente digital premium feito com todo amor e carinho.">
+    <meta property="og:title" content="Homenagem para Minha Mãe ❤️">
+    <meta property="og:description" content="Um presente digital premium feito com todo amor do mundo.">
+    <meta property="og:type" content="website">
+    <title>Para Minha Mãe ❤️ | Homenagem Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-heart">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 88 C20 62 2 44 2 26 C2 10 16 0 28 0 C36 0 43 6 50 14 C57 6 64 0 72 0 C84 0 98 10 98 26 C98 44 80 62 50 88Z" fill="none" stroke="url(#goldGradient)" stroke-width="2.5" stroke-dasharray="300" stroke-dashoffset="300" class="loading-heart-path"/>
+                    <defs>
+                        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#c9976b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#b8864e;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <p class="loading-text">Preparando algo especial...</p>
+        </div>
+    </div>
+
+    <!-- Cover Screen -->
+    <div class="cover-screen" id="coverScreen">
+        <canvas id="coverParticles"></canvas>
+        <div class="cover-content">
+            <span class="cover-badge">✨ Homenagem Premium ✨</span>
+            <h1 class="cover-title">
+                <span class="cover-line">Existe um amor</span>
+                <span class="cover-line">que nunca se apaga,</span>
+                <span class="cover-line">um abraço que sempre acolhe,</span>
+                <span class="cover-line">e um nome que carrega</span>
+                <span class="cover-line">o significado mais puro</span>
+                <span class="cover-line">da palavra <em>eternidade</em>.</span>
+            </h1>
+            <div class="cover-name-container">
+                <span class="cover-for">Para</span>
+                <h2 class="cover-name" id="coverName">Maria</h2>
+            </div>
+            <p class="cover-subtitle">Uma homenagem feita por quem te ama infinitamente</p>
+            <button class="cover-btn" id="openBtn">
+                <span>Abrir essa homenagem</span>
+                <svg class="btn-heart-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+        </div>
+        <div class="cover-sparkles" id="coverSparkles"></div>
+    </div>
+
+    <!-- Main Site -->
+    <div class="main-site" id="mainSite">
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor"></div>
+        <div class="cursor-dot" id="cursorDot"></div>
+
+        <!-- Background Canvas -->
+        <canvas class="bg-particles" id="bgParticles"></canvas>
+
+        <!-- Floating Music Button -->
+        <button class="music-toggle" id="musicToggle" aria-label="Ativar/Desativar música">
+            <svg class="music-icon playing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <svg class="music-icon paused" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13" stroke-dasharray="1"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>
+        </button>
+
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero">
+            <div class="hero-glow hero-glow-1"></div>
+            <div class="hero-glow hero-glow-2"></div>
+            <div class="hero-container">
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-frame">
+                        <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&h=700&fit=crop&crop=faces" alt="Mãe querida" class="hero-image" id="heroImage">
+                        <div class="hero-image-shine"></div>
+                    </div>
+                    <div class="hero-image-decoration"></div>
+                </div>
+                <div class="hero-text-content">
+                    <span class="hero-badge">🌸 Mãe 🌸</span>
+                    <h2 class="hero-title">Você é a <span class="gold-text">luz</span> que ilumina meus dias</h2>
+                    <p class="hero-description">
+                        Desde o primeiro instante, você foi abrigo, força e ternura. Cada passo que dei, cada conquista que alcancei, carrega um pedaço do seu amor incondicional. Esta homenagem é um pequeno reflexo da imensidão que você representa.
+                    </p>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">Amor</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number">+1M</span>
+                            <span class="stat-label">Sorrisos</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Dedicação</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span>Role para continuar</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="timeline-section" id="timeline">
+            <div class="section-header">
+                <span class="section-badge">📖 Nossa História</span>
+                <h2 class="section-title">Linha do <span class="gold-text">Tempo</span></h2>
+                <p class="section-subtitle">Cada momento especial que vivemos juntos</p>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <!-- Timeline items will be generated by JS -->
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section" id="gallery">
+            <div class="section-header">
+                <span class="section-badge">🖼️ Memórias</span>
+                <h2 class="section-title">Galeria de <span class="gold-text">Momentos</span></h2>
+                <p class="section-subtitle">Clique nas imagens para ampliar</p>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items generated by JS -->
+            </div>
+        </section>
+
+        <!-- Letter Section -->
+        <section class="letter-section" id="letter">
+            <canvas class="letter-particles" id="letterParticles"></canvas>
+            <div class="letter-container">
+                <div class="letter-paper">
+                    <div class="letter-decoration-top"></div>
+                    <div class="letter-content">
+                        <span class="letter-badge">💌 Carta Aberta</span>
+                        <h3 class="letter-title">Minha Querida Mãe,</h3>
+                        <div class="letter-body" id="letterBody">
+                            <!-- Typewriter text will appear here -->
+                        </div>
+                        <div class="letter-signature">
+                            <span class="signature-name">Com todo meu amor,</span>
+                            <span class="signature-heart">❤️</span>
+                        </div>
+                    </div>
+                    <div class="letter-decoration-bottom"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Counter Section -->
+        <section class="counter-section" id="counter">
+            <div class="counter-container">
+                <div class="counter-card">
+                    <span class="counter-icon">✨</span>
+                    <h3 class="counter-title">Há quantos dias você ilumina minha vida</h3>
+                    <div class="counter-display">
+                        <span class="counter-number" id="daysCounter">0</span>
+                        <span class="counter-unit">dias</span>
+                    </div>
+                    <div class="counter-detail">
+                        <span id="counterDetail"></span>
+                    </div>
+                    <div class="counter-sparkles" id="counterSparkles"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Section -->
+        <section class="interactive-section" id="interactive">
+            <div class="section-header">
+                <span class="section-badge">💫 Interativo</span>
+                <h2 class="section-title">Deixe seu <span class="gold-text">Carinho</span></h2>
+                <p class="section-subtitle">Clique na tela para espalhar amor</p>
+            </div>
+            <div class="interactive-area" id="interactiveArea">
+                <div class="interactive-hint">
+                    <span>Toque aqui ou clique para soltar corações</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="floating-heart-icon"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+                <div class="interactive-messages" id="interactiveMessages"></div>
+            </div>
+        </section>
+
+        <!-- Video Section -->
+        <section class="video-section" id="videos">
+            <div class="section-header">
+                <span class="section-badge">🎬 Vídeos</span>
+                <h2 class="section-title">Mensagens em <span class="gold-text">Vídeo</span></h2>
+                <p class="section-subtitle">Palavras que aquecem o coração</p>
+            </div>
+            <div class="video-grid" id="videoGrid">
+                <!-- Video cards generated by JS -->
+            </div>
+        </section>
+
+        <!-- Final Section -->
+        <section class="final-section" id="final">
+            <canvas class="stars-canvas" id="starsCanvas"></canvas>
+            <div class="final-content">
+                <span class="final-badge">🌟 Obrigado por Tudo 🌟</span>
+                <h2 class="final-title">
+                    Você não é apenas minha mãe.<br>
+                    Você é meu <span class="gold-text">porto seguro</span>,<br>
+                    minha <span class="gold-text">inspiração</span>,<br>
+                    e o amor mais <span class="gold-text">verdadeiro</span><br>
+                    que eu poderia ter.
+                </h2>
+                <p class="final-message">
+                    Obrigado por cada noite em claro, por cada lágrima enxugada, por cada sorriso que me deu forças. Sua existência transforma o mundo em um lugar mais bonito. Te amar é a coisa mais natural e mais intensa que existe em mim.
+                </p>
+                <button class="final-btn" id="finalBtn">
+                    <span>Eu te amo mãe</span>
+                    <svg class="btn-heart-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </button>
+            </div>
+            <div class="final-overlay" id="finalOverlay">
+                <div class="final-overlay-content">
+                    <span class="final-overlay-icon">💖</span>
+                    <h2 class="final-overlay-title">Para Sempre</h2>
+                    <p class="final-overlay-text">Meu amor por você é eterno, infinito e incondicional. Obrigado por ser exatamente quem você é.</p>
+                    <div class="final-hearts-rain" id="finalHeartsRain"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p>Feito com <span class="footer-heart">❤️</span> e todo amor do mundo • Dia das Mães</p>
+            <p class="footer-year" id="footerYear"></p>
+        </footer>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div class="gallery-modal" id="galleryModal">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <div class="modal-content">
+            <img src="" alt="Memória" id="modalImage" class="modal-image">
+            <div class="modal-info">
+                <h4 id="modalTitle"></h4>
+                <p id="modalDesc"></p>
+            </div>
+        </div>
+        <button class="modal-nav modal-prev" id="modalPrev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="modal-nav modal-next" id="modalNext">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
