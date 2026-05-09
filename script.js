@@ -64,26 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalOverlay = document.getElementById('finalOverlayMessage');
     const finalStarsContainer = document.getElementById('finalStars');
     const currentYearSpan = document.getElementById('currentYear');
-    const heroImageFrame = document.getElementById('heroImageFrame');
-    const videoGrid = document.getElementById('videoGrid');
 
     currentYearSpan.textContent = new Date().getFullYear();
-
-    // --- Hero Image: primeira foto ou placeholder ---
-    function updateHeroImage() {
-        if (!heroImageFrame) return;
-        const firstPhoto = config.photos[0];
-        if (firstPhoto && firstPhoto.src) {
-            heroImageFrame.innerHTML = `<img src="${firstPhoto.src}" alt="Foto da Mamãe" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">`;
-        } else {
-            heroImageFrame.innerHTML = `
-                <div class="hero-image-placeholder">
-                    <span class="hero-image-icon">🌸</span>
-                    <p>Foto da Mamãe</p>
-                </div>
-            `;
-        }
-    }
 
     // --- Loading Screen ---
     window.addEventListener('load', () => {
@@ -215,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             messagesGrid.appendChild(card);
         });
     }
+    createMessageCards();
 
     // --- Galeria ---
     function createGallery() {
@@ -240,50 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
             galleryGrid.appendChild(item);
         });
     }
+    createGallery();
 
-    // --- Vídeos ---
-    function createVideoGrid() {
-        if (!videoGrid) return;
-        videoGrid.innerHTML = '';
-        config.videos.forEach((video) => {
-            const card = document.createElement('div');
-            card.className = 'video-card';
-            if (video.src) {
-                // Se for link do YouTube, incorpora iframe; senão, usa tag de vídeo
-                if (video.src.includes('youtube.com') || video.src.includes('youtu.be')) {
-                    let embedUrl = video.src;
-                    if (video.src.includes('watch?v=')) {
-                        const videoId = video.src.split('v=')[1]?.split('&')[0];
-                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                    } else if (video.src.includes('youtu.be/')) {
-                        const videoId = video.src.split('youtu.be/')[1]?.split('?')[0];
-                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                    }
-                    card.innerHTML = `
-                        <div class="video-player">
-                            <iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allowfullscreen style="border-radius:20px;"></iframe>
-                        </div>
-                        <div class="video-info">${video.title}</div>
-                    `;
-                } else {
-                    card.innerHTML = `
-                        <div class="video-player">
-                            <video controls style="width:100%;height:100%;border-radius:20px;">
-                                <source src="${video.src}" type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="video-info">${video.title}</div>
-                    `;
-                }
-            } else {
-                card.innerHTML = `
-                    <div class="video-player">🎬</div>
-                    <div class="video-info">${video.title}</div>
-                `;
-            }
-            videoGrid.appendChild(card);
-        });
-    }
+    modalClose.addEventListener('click', () => galleryModal.classList.remove('active'));
+    document.querySelector('.modal-overlay')?.addEventListener('click', () => galleryModal.classList.remove('active'));
 
     // --- Carta com Typewriter ---
     function typeWriter(text, element, speed = 25) {
@@ -327,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCounter, 1000);
     updateCounter();
 
-    // --- Seção Interativa ---
+    // --- Seção Interativa: estrelas e corações ao clicar ---
     function createFloatingElement(x, y) {
         const el = document.createElement('span');
         const isHeart = Math.random() > 0.5;
@@ -352,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 createFloatingElement(x + (Math.random()-0.5)*60, y + (Math.random()-0.5)*60);
             }, i * 50);
         }
+        // Mensagem aleatória flutuante
         const randomMsg = config.messages[Math.floor(Math.random() * config.messages.length)];
         const msgEl = document.createElement('div');
         msgEl.textContent = randomMsg.front;
@@ -392,7 +336,9 @@ document.addEventListener('DOMContentLoaded', () => {
     createStars();
 
     finalButton.addEventListener('click', () => {
+        // Ativar overlay final
         finalOverlay.classList.add('active');
+        // Chuva de corações
         for (let i = 0; i < 40; i++) {
             setTimeout(() => {
                 const heart = document.createElement('span');
@@ -422,12 +368,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(styleSheet);
-
-    // --- Inicializações ---
-    updateHeroImage();
-    createMessageCards();
-    createGallery();
-    createVideoGrid();
 
     // --- Scroll Reveal simples ---
     const revealElements = document.querySelectorAll('.section-header, .hero-text-content, .gallery-item, .message-card, .video-card');
