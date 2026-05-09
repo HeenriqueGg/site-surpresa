@@ -12,8 +12,14 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Garante que o body não role até a abertura sumir */
+        body.opening-active {
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body>
+<body class="opening-active">
 
     <div class="custom-cursor" id="customCursor"></div>
     <div class="cursor-trail" id="cursorTrail"></div>
@@ -78,9 +84,7 @@
             <div class="hero-glow hero-glow-2"></div>
             <div class="hero-container">
                 <div class="hero-image-wrapper">
-                    <div class="hero-image-frame" id="heroImageFrame">
-                        <!-- Será preenchido via JS com a primeira foto ou placeholder -->
-                    </div>
+                    <div class="hero-image-frame" id="heroImageFrame"></div>
                     <div class="hero-image-sparkles"></div>
                 </div>
                 <div class="hero-text-content">
@@ -115,8 +119,7 @@
                 <h2>Caixa de Mensagens do Coração</h2>
                 <p>Clique em cada carta para revelar uma mensagem especial</p>
             </div>
-            <div class="messages-grid" id="messagesGrid">
-            </div>
+            <div class="messages-grid" id="messagesGrid"></div>
         </section>
 
         <section class="gallery-section" id="gallery">
@@ -125,8 +128,7 @@
                 <h2>Galeria de Memórias</h2>
                 <p>Momentos que guardo com todo carinho no coração</p>
             </div>
-            <div class="gallery-grid" id="galleryGrid">
-            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
         </section>
 
         <div class="gallery-modal" id="galleryModal">
@@ -148,12 +150,11 @@
                         <span class="letter-stamp">🌷</span>
                         <h2>Minha Querida Mãe</h2>
                     </div>
-                    <div class="letter-body" id="letterBody">
-                    </div>
+                    <div class="letter-body" id="letterBody"></div>
                     <div class="letter-signature">
                         <span class="signature-line"></span>
                         <p>Com todo o meu amor,</p>
-                        <p class="signature-name">Henrique ❤️</p>
+                        <p class="signature-name">Seu filho(a) ❤️</p>
                     </div>
                     <div class="letter-sparkle-bottom">✦</div>
                 </div>
@@ -203,6 +204,15 @@
             <div class="floating-messages" id="floatingMessages"></div>
         </section>
 
+        <section class="video-section" id="videos">
+            <div class="section-header">
+                <span class="section-icon">🎬</span>
+                <h2>Álbum de Vídeos</h2>
+                <p>Mensagens e momentos especiais em vídeo</p>
+            </div>
+            <div class="video-grid" id="videoGrid"></div>
+        </section>
+
         <section class="final-section" id="final">
             <div class="final-stars-container" id="finalStars"></div>
             <div class="final-content">
@@ -244,8 +254,6 @@
         </footer>
     </main>
 
-    <script src="config.json" type="application/json" id="configData"></script>
-    <script src="supabase.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
